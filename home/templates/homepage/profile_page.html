@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+            height: 60px;
+        }
+        html {
+            position: relative;
+            min-height: 100%;
+        }
+        body {
+            margin-bottom: 160px;
+            padding-top: 56px;   
+
+        }
+        .logoutbtn{
+            background-color: black;
+            margin-left: 21px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: sans-serif;
+            font-weight: bold;
+            padding-top: 6px;
+          
+        }
+        .logoutbtn:hover{
+            background-color: grey;
+        }
+        .listing-card {
+            max-width: 100%;
+            height: 95%;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.3s ease-in-out;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .listing-image {
+            height: 200px;
+            object-fit: contain; 
+            width: 100%;
+        }
+        .userbtn{
+            background-color: white;
+            border: 1px solid;
+            border-color: black;
+            color: black;
+            border-radius: 9px;
+            margin: 3px;
+            
+        }
+        .userbtn:hover{
+            background-color: rgb(0, 0, 0);
+            border: 1px solid;
+            color: rgb(255, 255, 255);
+            
+        }
+        .postad{
+            background-color: white;
+            border: 1px solid;
+            border-color: black;
+            color: black;
+            border-radius: 9px;
+            
+        }
+        .postad:hover{
+            background-color: rgb(0, 0, 0);
+            border: 1px solid;
+            color: rgb(255, 255, 255);
+            
+        }
+        .listing-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+            transform: scale(1.02); 
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light  fixed-top" style="background-color: #e6e6e6;">
+        <a class="navbar-brand" href="{% url 'home_app:home' %}">
+            &larr; Back to Home
+        </a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="btn btn-dark logoutbtn" href="{% url 'home_app:logout' %}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container mt-5">
+        <h1 class="mb-4">My Listings</h1>
+        <a href="{% url 'listings:add_listing' %}" class="btn btn-primary mb-3 postad">Post a new AD</a>
+        
+        <div class="row">
+            {% for listing in listings %}
+                <div class="col-md-3 mb-4">
+                    <div class="card mb-4 shadow-sm listing-card">
+                        {% if listing.images.first %}
+                            <img src="{{ listing.images.first.image.url }}" class="card-img-top listing-image" alt="{{ listing.title }}">
+                        {% else %}
+                            <img src="{% static 'default.jpg' %}" class="card-img-top" alt="{{ listing.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ listing.title }}</h5>
+                            <p class="card-text">&#8377; {{ listing.price }}</p>
+                            <a href="{% url 'listings:listing_details' listing.id %}" class="btn btn-info userbtn">View</a>
+                            <a href="{% url 'listings:edit_listing' listing.id %}" class="btn btn-warning userbtn">Edit</a>
+                            <a href="{% url 'listings:delete_listing' listing.id %}" class="btn btn-danger userbtn">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

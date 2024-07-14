@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ listing.title }}</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .carousel {
+            max-width: 100%;
+            margin: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+        }
+
+        .carousel-item img {
+            height: auto;
+            width: 100%;
+            object-fit: contain;
+            aspect-ratio: 16/9;
+            background-color: black;
+        }
+        .details-container{
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border: 1px solid;
+            width: 632px;
+            margin-left: 14px;
+            margin-top: -12px;
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+        }
+        .seller-info {
+            border: 1px solid;
+            border-color: #777;
+            padding: 20px;
+            font-size: 20px;
+            margin-top: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+        }
+
+
+        .carousel-control-prev, .carousel-control-next {
+            width: 5%;
+        }
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            background-color: black;
+        }
+        .details-column {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .price-section { 
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #000;
+            border: 1px solid;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+            height: 112px;
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+        }
+        .price-section .state {
+            margin-top: 10px;
+        }
+        .price-section .date {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 0.9rem;
+        }
+        .date-state {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 0.7em; 
+            color: #666;
+            padding-top: 20px;
+            font-weight: normal;
+        }
+        .others{
+            border: 1px solid;
+            border-color: #777;
+            border-radius: 3px;
+            padding: 20px;
+            font-size: 20px;
+            margin-top:25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(0, 0, 0, .125);
+            border-radius: .25rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e6e6e6;height: 74px;">
+        <a class="navbar-brand" href="{% url 'home_app:home' %}">
+            &larr; Back to Home
+        </a>
+    </nav>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-7" style="padding-right: 20px;">
+                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        {% for image in listing.images.all %}
+                            <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" class="{% if forloop.first %}active{% endif %}"></li>
+                        {% endfor %}
+                    </ol>
+                    <div class="carousel-inner">
+                        {% for image in listing.images.all %}
+                            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                <img class="d-block w-100" src="{{ image.image.url }}" alt="Slide {{ forloop.counter }}">
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4 details-column">
+                <div class="price-section">
+                    &#8377;{{ listing.price }}
+                    <div class="date-state">
+                        <p>{{ listing.state |upper }}</p>
+                        <p>{{ listing.created_at|date:"M d" }}</p></div>
+                </div>
+                <div class="seller-info">
+                    <h4 style="font-size: 20px;font-weight: 600;">{{ listing.seller.username }}</h4>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'listings:contact_seller' listing.id %}" class="btn btn-primary " style="margin-top: 13px; width: 100%; background-color: #000; border-color: #000;" >Contact Seller</a>
+                    {% else %}
+                        <a href="{% url 'home_app:login' %}?next={% url 'listings:contact_seller' listing.id %}" class="btn btn-primary" style="margin-top: 13px; width: 100%; background-color: #000; border-color: #000;">Contact Seller</a>
+                    {% endif %}
+                </div>
+                <div class="others">
+                    <h4 style="font-size: 20px;font-weight: normal;">Category: {{ listing.category }}</h4>
+                    <h4 style="font-size: 20px;font-weight: normal;">Condition: {{ listing.condition }}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="details-container">
+                <h4 style="font-size: 20px;font-weight: 700;">Description</h4>
+                <p>{{ listing.description }}</p>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap" async defer></script>
+</body>
+</html>

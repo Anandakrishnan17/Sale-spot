@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!-- Include Bootstrap CSS or your custom styling -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e6e6e6;height: 74px;">
+        <a class="navbar-brand" href="{% url 'home_app:home' %}">
+            &larr; Back to Home
+        </a>
+    </nav>
+    <div class="row justify-content-center" style="padding-top:65px ;padding-left: 50px;">
+        <div class="col-md-4">
+            <div class="card" style="width: 400px;">
+                <div class="card-header fw-bold text-center" style="font-weight: bold;">Login</div>
+                <div class="card-body" style="padding-left: 65px;height: 230px;">
+                    <form action="" method="post" style="margin-top: 38px;">
+                        {% csrf_token %}
+                        {{form.as_p}}
+                        <input type="submit" class="btn btn-sm btn-success" style="margin-left: 110px;margin-top: 6px;font-weight: bold;" value="Login">
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    <p>Don't have an account? <a href="{% url 'home_app:register' %}" class="btn btn-link">Sign Up</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

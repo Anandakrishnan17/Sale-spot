@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listing List</title>
+</head>
+<body>
+    <h1>Listings</h1>
+    <ul>
+        {% for listing in listings %}
+        <li>
+            <a href="{% url 'listings:listing_list'%}">{{ listing.title }}</a>
+            - {{ listing.price }}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
